@@ -3,8 +3,16 @@
  */
 class Store {
   constructor(initState = {}) {
+    if (
+      new Set(initState.list.map((item) => item.code)).size !==
+      initState.list.length
+    ) {
+      throw new Error("code should be unique");
+    }
+
     this.state = initState;
     this.listeners = []; // Слушатели изменений состояния
+    this.lastCode = initState.list.sort((a, b) => b.code - a.code)[0].code;
   }
 
   /**
@@ -44,7 +52,7 @@ class Store {
   addItem() {
     this.setState({
       ...this.state,
-      list: [...this.state.list, {code: this.state.list.length + 1, title: 'Новая запись'}]
+      list: [...this.state.list, {code: ++this.lastCode, title: 'Новая запись'}]
     })
   };
 
