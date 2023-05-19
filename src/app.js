@@ -1,7 +1,8 @@
-import React, {useCallback} from 'react';
-import List from "./components/list";
-import Controls from "./components/controls";
+import React, { useCallback } from "react";
+import Cart from "./components/cart";
+import CartPreview from "./components/cart-preview";
 import Head from "./components/head";
+import List from "./components/list";
 import PageLayout from "./components/page-layout";
 
 /**
@@ -9,31 +10,36 @@ import PageLayout from "./components/page-layout";
  * @param store {Store} Хранилище состояния приложения
  * @returns {React.ReactElement}
  */
-function App({store}) {
-
-  const list = store.getState().list;
+function App({ store }) {
+  const { list, isCartModalOpen } = store.getState();
+  const itemsInCart = list.filter((item) => item.countInCart > 0);
 
   const callbacks = {
-    onDeleteItem: useCallback((code) => {
-      store.deleteItem(code);
-    }, [store]),
-
-    onSelectItem: useCallback((code) => {
-      store.selectItem(code);
-    }, [store]),
-
-    onAddItem: useCallback(() => {
-      store.addItem();
-    }, [store])
-  }
+    onAdd: useCallback((code) => store.addItemToCart(code), [store]),
+    onCartOpenClick: useCallback(() => store.toggleCartModal(), [store]),
+  };
 
   return (
     <PageLayout>
-      <Head title='Приложение на чистом JS'/>
-      <Controls onAdd={callbacks.onAddItem}/>
-      <List list={list}
-            onDeleteItem={callbacks.onDeleteItem}
-            onSelectItem={callbacks.onSelectItem}/>
+      <Head title="Приложение на чистом JS" />
+
+      <CartPreview
+        itemsCount={itemsInCart.length}
+        itemsSum={itemsInCart.reduce(
+          (sum, item) => sum + item.price * item.countInCart,
+          0
+        )}
+        onCartOpenClick={callbacks.onCartOpenClick}
+      />
+
+      {isCartModalOpen && (
+        <Cart
+          items={list.filter((item) => item.countInCart > 0)}
+          onClose={callbacks.onCartOpenClick}
+        />
+      )}
+
+      <List list={list} onAdd={callbacks.onAdd} />
     </PageLayout>
   );
 }

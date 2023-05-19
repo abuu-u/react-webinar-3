@@ -1,8 +1,9 @@
+import { cn as bem } from "@bem-react/classname";
 import PropTypes from "prop-types";
 import React from "react";
 import "./style.css";
 
-function Item(props) {
+function CartItem(props) {
   const callbacks = {
     onAdd: (e) => {
       e.stopPropagation();
@@ -10,19 +11,21 @@ function Item(props) {
     },
   };
 
+  const cn = bem("CartItem");
+
   return (
-    <div className="Item" onClick={callbacks.onClick}>
-      <div className="Item-code">{props.item.code}</div>
-      <div className="Item-title">{props.item.title}</div>
-      <div className="Item-price">{props.item.price} ₽</div>
-      <div className="Item-actions">
+    <div className={cn()} onClick={callbacks.onClick}>
+      <div className={cn("code")}>{props.item.code}</div>
+      <div className={cn("title")}>{props.item.title}</div>
+      <div className={cn("price")}>{props.item.price} ₽</div>
+      <div className={cn("actions")}>
         <button onClick={callbacks.onAdd}>Добавить</button>
       </div>
     </div>
   );
 }
 
-Item.propTypes = {
+CartItem.propTypes = {
   item: PropTypes.shape({
     code: PropTypes.number,
     title: PropTypes.string,
@@ -31,8 +34,8 @@ Item.propTypes = {
   onAdd: PropTypes.func,
 };
 
-Item.defaultProps = {
+CartItem.defaultProps = {
   onAdd: () => {},
 };
 
-export default React.memo(Item);
+export default React.memo(CartItem);
