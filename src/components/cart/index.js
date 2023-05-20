@@ -1,10 +1,10 @@
 import { cn as bem } from "@bem-react/classname";
 import PropTypes from "prop-types";
 import React from "react";
-import Item from "../item";
+import CartItem from "../cart-item";
 import "./style.css";
 
-function Cart({ onClose, items }) {
+function Cart({ onClose, onDelete, items }) {
   const cn = bem("Cart");
 
   return (
@@ -13,19 +13,21 @@ function Cart({ onClose, items }) {
         <div className={cn("top")}>
           <p className={cn("header")}>Корзина</p>
 
-          <button onClick={() => onClose()}>Перейти</button>
+          <button onClick={() => onClose()}>Закрыть</button>
         </div>
 
         <div>
-          {items.map(({ code, countInCart, price, title }) => (
-            <Item key={code} item={{ code, title }} />
+          {items.map((item) => (
+            <CartItem key={item.code} item={item} onDelete={onDelete} />
           ))}
         </div>
 
-        <p>
+        <p className={cn("total")}>
           <span>Итого</span>
 
-          <span>{items.reduce((a, b) => a + b.price * b.countInCart, 0)}</span>
+          <span>
+            {items.reduce((a, b) => a + b.price * b.countInCart, 0)} ₽
+          </span>
         </p>
       </div>
     </div>

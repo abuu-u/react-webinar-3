@@ -16,18 +16,21 @@
   background: #fff;
   border-radius: 10px;
   overflow: hidden;
+  padding-bottom: 70px;
 }
 
 .Cart-top {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 20px;
   background: #f5f5f5;
-
+  margin-bottom: 70px;
 }
 
 .Cart-header {
-
+  font-size: 2em;
+  font-weight: bold;
   margin: 0;
 }
 
@@ -37,4 +40,22 @@
 
 .Cart-bold {
   font-weight: 700;
+}
+
+.Cart-total {
+  display: grid;
+  justify-content: flex-start;
+  justify-items: end;
+  align-items: center;
+  grid-template-columns: 50px 1fr 100px 100px 100px;
+  gap: 10px;
+  font-weight: 700;
+}
+
+.Cart-total > *:first-child {
+  grid-column: 3/4;
+}
+
+.Cart-total > *:last-child {
+  grid-column: 4/5;
 }

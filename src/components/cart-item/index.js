@@ -5,9 +5,9 @@ import "./style.css";
 
 function CartItem(props) {
   const callbacks = {
-    onAdd: (e) => {
+    onDelete: (e) => {
       e.stopPropagation();
-      props.onAdd(props.item.code);
+      props.onDelete(props.item.code);
     },
   };
 
@@ -18,8 +18,9 @@ function CartItem(props) {
       <div className={cn("code")}>{props.item.code}</div>
       <div className={cn("title")}>{props.item.title}</div>
       <div className={cn("price")}>{props.item.price} ₽</div>
+      <div className={cn("count")}>{props.item.countInCart} шт</div>
       <div className={cn("actions")}>
-        <button onClick={callbacks.onAdd}>Добавить</button>
+        <button onClick={callbacks.onDelete}>Удалить</button>
       </div>
     </div>
   );
@@ -31,11 +32,11 @@ CartItem.propTypes = {
     title: PropTypes.string,
     price: PropTypes.number,
   }).isRequired,
-  onAdd: PropTypes.func,
+  onDelete: PropTypes.func,
 };
 
 CartItem.defaultProps = {
-  onAdd: () => {},
+  onDelete: () => {},
 };
 
 export default React.memo(CartItem);

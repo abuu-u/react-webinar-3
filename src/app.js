@@ -17,6 +17,7 @@ function App({ store }) {
   const callbacks = {
     onAdd: useCallback((code) => store.addItemToCart(code), [store]),
     onCartOpenClick: useCallback(() => store.toggleCartModal(), [store]),
+    onDelete: useCallback((code) => store.removeItemFromCart(code), [store]),
   };
 
   return (
@@ -34,8 +35,9 @@ function App({ store }) {
 
       {isCartModalOpen && (
         <Cart
-          items={list.filter((item) => item.countInCart > 0)}
+          items={itemsInCart}
           onClose={callbacks.onCartOpenClick}
+          onDelete={callbacks.onDelete}
         />
       )}
 
