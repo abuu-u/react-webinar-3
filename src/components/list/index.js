@@ -20,7 +20,7 @@ List.propTypes = {
       code: PropTypes.number,
     }).isRequired
   ),
-  Item: PropTypes.node.isRequired,
+  Item: PropTypes.elementType.isRequired,
   itemProps: PropTypes.object,
 };
 
