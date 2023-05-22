@@ -2,7 +2,9 @@ import React, { useCallback } from "react";
 import Cart from "./components/cart";
 import CartPreview from "./components/cart-preview";
 import Head from "./components/head";
+import Item from "./components/item";
 import List from "./components/list";
+import Modal from "./components/modal";
 import PageLayout from "./components/page-layout";
 
 /**
@@ -11,12 +13,12 @@ import PageLayout from "./components/page-layout";
  * @returns {React.ReactElement}
  */
 function App({ store }) {
-  const { list, isCartModalOpen } = store.getState();
-  const itemsInCart = list.filter((item) => item.countInCart > 0);
+  const { list, cart } = store.getState();
+  const [isCartModalOpen, setIsCartModalOpen] = React.useState(false);
 
   const callbacks = {
     onAdd: useCallback((code) => store.addItemToCart(code), [store]),
-    onCartOpenClick: useCallback(() => store.toggleCartModal(), [store]),
+    onCartModalToggle: () => setIsCartModalOpen((prev) => !prev),
     onDelete: useCallback((code) => store.removeItemFromCart(code), [store]),
   };
 
@@ -25,23 +27,22 @@ function App({ store }) {
       <Head title="Приложение на чистом JS" />
 
       <CartPreview
-        itemsCount={itemsInCart.length}
-        itemsSum={itemsInCart.reduce(
-          (sum, item) => sum + item.price * item.countInCart,
-          0
-        )}
-        onCartOpenClick={callbacks.onCartOpenClick}
+        itemsCount={cart.total}
+        itemsSum={cart.sum}
+        onCartOpenClick={callbacks.onCartModalToggle}
       />
 
       {isCartModalOpen && (
-        <Cart
-          items={itemsInCart}
-          onClose={callbacks.onCartOpenClick}
-          onDelete={callbacks.onDelete}
-        />
+        <Modal title="Корзина" onClose={callbacks.onCartModalToggle}>
+          <Cart
+            items={cart.items}
+            itemsSum={cart.sum}
+            onDelete={callbacks.onDelete}
+          />
+        </Modal>
       )}
 
-      <List list={list} onAdd={callbacks.onAdd} />
+      <List list={list} Item={Item} itemProps={{ onAdd: callbacks.onAdd }} />
     </PageLayout>
   );
 }

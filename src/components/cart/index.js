@@ -1,56 +1,43 @@
 import { cn as bem } from "@bem-react/classname";
 import PropTypes from "prop-types";
 import React from "react";
+import { formatNumber } from "../../utils";
 import CartItem from "../cart-item";
+import List from "../list";
 import "./style.css";
 
-function Cart({ onClose, onDelete, items }) {
+function Cart({ onDelete, items, itemsSum }) {
   const cn = bem("Cart");
 
   return (
     <div className={cn()}>
-      <div className={cn("body")}>
-        <div className={cn("top")}>
-          <p className={cn("header")}>Корзина</p>
+      <List list={items} Item={CartItem} itemProps={{ onDelete: onDelete }} />
 
-          <button onClick={() => onClose()}>Закрыть</button>
-        </div>
+      <p className={cn("total")}>
+        <span>Итого</span>
 
-        <div>
-          {items.map((item) => (
-            <CartItem key={item.code} item={item} onDelete={onDelete} />
-          ))}
-        </div>
-
-        <p className={cn("total")}>
-          <span>Итого</span>
-
-          <span>
-            {items.reduce((a, b) => a + b.price * b.countInCart, 0)} ₽
-          </span>
-        </p>
-      </div>
+        <span>{formatNumber(itemsSum)} ₽</span>
+      </p>
     </div>
   );
 }
 
 Cart.propTypes = {
-  onClose: PropTypes.func,
-  onDelete: PropTypes.func,
+  onDelete: PropTypes.func.isRequired,
   items: PropTypes.arrayOf(
     PropTypes.shape({
       code: PropTypes.number,
-      countInCart: PropTypes.number,
+      count: PropTypes.number,
       price: PropTypes.number,
       title: PropTypes.string,
-    })
+    }).isRequired
   ),
+  itemsSum: PropTypes.number,
 };
 
 Cart.defaultProps = {
-  onClose: () => {},
-  onDelete: () => {},
   items: [],
+  itemsSum: 0,
 };
 
 export default React.memo(Cart);

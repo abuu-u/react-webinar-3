@@ -2,8 +2,6 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  transition: background-color 1s;
-  border-bottom: 1px dashed #ccc;
   display: grid;
   grid-template-areas: "code title price count actions";
   grid-template-columns: 50px 1fr 100px 100px 100px;

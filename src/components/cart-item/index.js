@@ -1,6 +1,7 @@
 import { cn as bem } from "@bem-react/classname";
 import PropTypes from "prop-types";
 import React from "react";
+import { formatNumber } from "../../utils";
 import "./style.css";
 
 function CartItem(props) {
@@ -17,8 +18,8 @@ function CartItem(props) {
     <div className={cn()} onClick={callbacks.onClick}>
       <div className={cn("code")}>{props.item.code}</div>
       <div className={cn("title")}>{props.item.title}</div>
-      <div className={cn("price")}>{props.item.price} ₽</div>
-      <div className={cn("count")}>{props.item.countInCart} шт</div>
+      <div className={cn("price")}>{formatNumber(props.item.price)} ₽</div>
+      <div className={cn("count")}>{formatNumber(props.item.count)} шт</div>
       <div className={cn("actions")}>
         <button onClick={callbacks.onDelete}>Удалить</button>
       </div>
@@ -31,12 +32,11 @@ CartItem.propTypes = {
     code: PropTypes.number,
     title: PropTypes.string,
     price: PropTypes.number,
+    count: PropTypes.number,
   }).isRequired,
-  onDelete: PropTypes.func,
+  onDelete: PropTypes.func.isRequired,
 };
 
-CartItem.defaultProps = {
-  onDelete: () => {},
-};
+CartItem.defaultProps = {};
 
 export default React.memo(CartItem);
